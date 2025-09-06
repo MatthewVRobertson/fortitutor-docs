@@ -46,8 +46,26 @@ package Fitness {
 Fitness.Exercise o--> Gymnasium.Equipment
 
 package Training {
+    class SessionWork {
+        Series List<SeriesWorked>
+    }
 
+    class SeriesWorked {
+        Exercise
+        Sets List<SetWorked>
+    }
+
+    class SetWorked {
+        Reps
+        Weight
+    }
+
+    SessionWork *--> SeriesWorked
+    SeriesWorked *--> SetWorked
 }
+
+Training.SeriesWorked o--> Fitness.Exercise
+
 package Gymnasium {
     class Venue {
         VenuId
