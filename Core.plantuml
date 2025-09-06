@@ -50,6 +50,37 @@ package Training {
         Name
     }
 
+    class MacroPeriodization
+    {
+        TrainingProfile
+        DateStartUtc
+        DateStartEndUtc
+    }
+
+    class MesocyclePeriodization
+    {
+        CycleOrder        
+        CycleLengthUnit
+        CycleLengthValue
+    }
+
+    class MicroCyclePeriodization
+    {
+        CycleOrder
+        IsDeload        
+        Sesssions List<SessionPeriodization>
+    }
+
+    class WorkOutSessionPeriodization
+    {
+        IsRestDay
+        Exercises List<Exercise> 
+    }
+
+    MacroPeriodization *--> MesocyclePeriodization     
+    MesocyclePeriodization *--> MicroCyclePeriodization
+    MicroCyclePeriodization *--> WorkOutSessionPeriodization
+
     class TrainingProfileWeightTracker {
         TrainingProfileId
         RecordDateUtc
@@ -80,6 +111,9 @@ package Training {
         Weight
     }
 
+    SessionPeriodization o--> Fitness.Exercise
+    TrainingProfileWeightTracker o--> TrainingProfile
+    MacroPeriodization o--> TrainingProfile
     TrainingProfile *--> TrainingProfileRole
     SessionWork o--> TrainingProfile
     SessionWork *--> SeriesWorked
