@@ -2,18 +2,18 @@
 
 package Anatomy {
     class MuscleGroup {
-        MuscleGroupId
+        MuscleGroup
         Name
-        BodySegmentId
+        BodySegment
     }
 
     class Muscle {
         Name
-        MuscleGroupId
+        MuscleGroup
     }
 
     class BodySegment {
-        BodySegmentId
+        BodySegment
         Name
     }
     
@@ -53,11 +53,13 @@ package Gymnasium {
         VenuId
         Name  
         + Address Address      
+        + VenueEquipment List<VenueEquipment>
     }
 
     class VenueEquipment {
-        VenuId
-        EquipmentId
+        Venu
+        Equipment
+        Quantity
     }
 
     class Equipment {
