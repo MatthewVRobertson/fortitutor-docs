@@ -60,7 +60,7 @@ package Training {
     class MesocyclePeriodization
     {
         CycleOrder        
-        CycleLengthUnit
+        CycleLengthTimeUnit
         CycleLengthValue
     }
 
@@ -111,7 +111,7 @@ package Training {
         Weight
     }
 
-    SessionPeriodization o--> Fitness.Exercise
+    WorkOutSessionPeriodization o--> Fitness.Exercise
     TrainingProfileWeightTracker o--> TrainingProfile
     MacroPeriodization o--> TrainingProfile
     TrainingProfile *--> TrainingProfileRole
