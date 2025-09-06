@@ -1,0 +1,91 @@
+@startuml
+
+package Anatomy {
+    class MuscleGroup {
+        MuscleGroupId
+        Name
+        BodySegmentId
+    }
+
+    class Muscle {
+        Name
+        MuscleGroupId
+    }
+
+    class BodySegment {
+        BodySegmentId
+        Name
+    }
+    
+    BodySegment *--> MuscleGroup
+    MuscleGroup *--> Muscle
+}
+
+package Fitness {
+    class Exercise {
+        Name
+        + MusclesWorked List<ExerciseMuscleWorked>
+        Equipment
+    }
+
+    class ExerciseMuscleWorked {
+        Muscle
+        MuscleWorkedAmount
+    }
+
+    enum MuscleWorkedAmount {
+        Primary
+        Secondary
+    }
+
+    Exercise *--> ExerciseMuscleWorked
+    ExerciseMuscleWorked --> MuscleWorkedAmount
+    ExerciseMuscleWorked o--> Anatomy.Muscle
+}
+
+Fitness.Exercise o--> Gymnasium.Equipment
+
+package Training {
+
+}
+package Gymnasium {
+    class Venue {
+        VenuId
+        Name  
+        + Address Address      
+    }
+
+    class VenueEquipment {
+        VenuId
+        EquipmentId
+    }
+
+    class Equipment {
+        Name
+        EquipmentType
+    }
+
+    enum EquipmentType {
+        Freewreight
+        Machine
+        Other
+    }
+    
+    Venue *--> VenueEquipment
+    VenueEquipment o--> Equipment
+    Equipment --> EquipmentType
+}
+Venue *--> Common.Address
+
+package Common {
+    class Address {
+        StreetNumber
+        StreeName
+        Unit
+        PostalCode
+        Country
+        State
+        City
+    }
+}
+@enduml
