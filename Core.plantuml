@@ -46,8 +46,28 @@ package Fitness {
 Fitness.Exercise o--> Gymnasium.Equipment
 
 package Training {
+    class TrainingProfile {
+        Name
+    }
+
+    class TrainingProfileWeightTracker {
+        TrainingProfileId
+        RecordDateUtc
+        WeightInput decimal(19,4)
+        IsInputMetric
+        NormalizedWeightKg decimal(19,4)
+    }
+
+    class TrainingProfileRole {
+        TrainingProfileId
+        RoleId
+        UserId
+    }
+
     class SessionWork {
+        TrainingProfile
         Series List<SeriesWorked>
+        + SessionStartDateUtc
     }
 
     class SeriesWorked {
@@ -60,6 +80,8 @@ package Training {
         Weight
     }
 
+    TrainingProfile *--> TrainingProfileRole
+    SessionWork o--> TrainingProfile
     SessionWork *--> SeriesWorked
     SeriesWorked *--> SetWorked
 }
