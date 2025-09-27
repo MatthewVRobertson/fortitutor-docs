@@ -73,9 +73,12 @@ package Training {
     {
         MacroPeriodizationId
         TrainingProfile
-        DateStartUtc
-        DateStartEndUtc
+        StartDateRelative
+        EndDateRelative
     }
+    note top of MacroPeriodization
+        Overall goal, months, season or year.
+    end note
 
     class MesocyclePeriodization
     {
@@ -84,7 +87,14 @@ package Training {
         CycleOrder        
         CycleLengthTimeUnit
         CycleLengthValue
+        StartDateRelative
+        EndDateRelative
     }
+    note top of MesocyclePeriodization
+        Focused phases - weeks to months.
+        Mesocycles allow changes during a macro cycle,
+        this is why there are start and end dates.
+    end note
 
     class MicroCyclePeriodization
     {
@@ -92,6 +102,9 @@ package Training {
         IsDeload        
         Sesssions List<SessionPeriodization>
     }
+    note top of MicroCyclePeriodization
+        The day to day plan
+    end note
 
     class WorkOutSessionPeriodization
     {
@@ -122,6 +135,12 @@ package Training {
     class SeriesWorked {
         Exercise
         Sets List<SetWorked>
+    }
+
+
+    class SetType {
+        Warmup
+        Working
     }
 
     class SetWorked {
