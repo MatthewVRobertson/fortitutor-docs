@@ -26,7 +26,7 @@ package Fitness {
         Name
         + MusclesWorked List<ExerciseMuscleWorked>
         Equipment        
-        ExerciseExecution
+        ExerciseExecutionType
     }
 
     class ExerciseMuscleWorked {
@@ -44,19 +44,20 @@ package Fitness {
         EquipmentType
     }
 
-    enum ExerciseExecution {
+    enum ExerciseExecutionType {
         Bilateral,
         Unilateral
     }
+
     enum EquipmentType {
-        Freewreight
+        Freeweight
         Machine
         Other
     }
 
     Exercise *--> ExerciseMuscleWorked
     Exercise o--> Equipment
-    Exercise --> ExerciseExecution
+    Exercise --> ExerciseExecutionType
     ExerciseMuscleWorked --> MuscleWorkedAmount
     Fitness.ExerciseMuscleWorked o------> Anatomy.Muscle
     Equipment --> EquipmentType
@@ -98,6 +99,7 @@ package Training {
 
     class MicroCyclePeriodization
     {
+        MicroCyclePeriodizationId
         CycleOrder
         IsDeload        
         Sesssions List<SessionPeriodization>
@@ -137,15 +139,16 @@ package Training {
         Sets List<SetWorked>
     }
 
-
-    class SetType {
+    enum SetType {
         Warmup
         Working
     }
 
     class SetWorked {
+        SetType
         Reps
         Weight
+        WeightUnitType
         SideWorked
     }
 
@@ -178,9 +181,13 @@ package Training {
     SessionWork *--> SeriesWorked
     SeriesWorked *--> SetWorked
     SetWorked --> SideWork
+    SetWorked --> SetType
+    
 }
 
+SetWorked ---> Common.WeightUnitType
 Training.SeriesWorked o--> Fitness.Exercise
+TrainingProfileRole --> Auth.Role
 
 package Venue {
     class Facility {
@@ -218,5 +225,22 @@ package Common {
         LocaleId
         LocaleCode
     }
+
+    enum WeightUnitType {
+        Kg
+        Lb
+    }
 }
+
+
+package Auth {
+    class Role {
+        RoleId
+        Name
+    }
+}
+
+note top of Auth
+    This content in managed by Fortitutor Auth service
+end note
 @enduml
