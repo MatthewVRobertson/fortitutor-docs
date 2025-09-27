@@ -58,9 +58,10 @@ package Fitness {
     Exercise o--> Equipment
     Exercise --> ExerciseExecution
     ExerciseMuscleWorked --> MuscleWorkedAmount
-    ExerciseMuscleWorked o--> Anatomy.Muscle
+    Fitness.ExerciseMuscleWorked o------> Anatomy.Muscle
     Equipment --> EquipmentType
 }
+
 
 
 package Training {
@@ -163,28 +164,25 @@ package Training {
 Training.SeriesWorked o--> Fitness.Exercise
 
 package Venue {
-    class Venue {
+    class Facility {
         VenuId
         Name  
         + Address Address      
         + VenueEquipment List<VenueEquipment>
     }
 
-    class VenueEquipment {
+    class FacilityEquipment {
         Venu
         Equipment
         Quantity
     }
-
     
-    
-    Venue *--> VenueEquipment
-    
+    Facility *---> FacilityEquipment
 }
 
-VenueEquipment o--> Fitness.Equipment
+FacilityEquipment o---> Fitness.Equipment
 
-Venue *--> Common.Address
+Facility *-----> Common.Address
 
 package Common {
     class Address {
