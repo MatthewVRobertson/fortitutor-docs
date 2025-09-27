@@ -126,6 +126,7 @@ package Training {
     class SetWorked {
         Reps
         Weight
+        SideWorked
     }
 
     class OneRepMaxTracker {
@@ -156,6 +157,7 @@ package Training {
    
     SessionWork *--> SeriesWorked
     SeriesWorked *--> SetWorked
+    SetWorked --> SideWork
 }
 
 Training.SeriesWorked o--> Fitness.Exercise
