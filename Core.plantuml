@@ -25,7 +25,8 @@ package Fitness {
     class Exercise {
         Name
         + MusclesWorked List<ExerciseMuscleWorked>
-        Equipment
+        Equipment        
+        ExerciseExecution
     }
 
     class ExerciseMuscleWorked {
@@ -38,12 +39,29 @@ package Fitness {
         Secondary
     }
 
+    class Equipment {
+        Name
+        EquipmentType
+    }
+
+    enum ExerciseExecution {
+        Bilateral,
+        Unilateral
+    }
+    enum EquipmentType {
+        Freewreight
+        Machine
+        Other
+    }
+
     Exercise *--> ExerciseMuscleWorked
+    Exercise o--> Equipment
+    Exercise --> ExerciseExecution
     ExerciseMuscleWorked --> MuscleWorkedAmount
     ExerciseMuscleWorked o--> Anatomy.Muscle
+    Equipment --> EquipmentType
 }
 
-Fitness.Exercise o--> Gymnasium.Equipment
 
 package Training {
     class TrainingProfile {
@@ -52,6 +70,7 @@ package Training {
 
     class MacroPeriodization
     {
+        MacroPeriodizationId
         TrainingProfile
         DateStartUtc
         DateStartEndUtc
@@ -59,6 +78,8 @@ package Training {
 
     class MesocyclePeriodization
     {
+        MesocyclePeriodizationId
+        MacroPeriodizationId
         CycleOrder        
         CycleLengthTimeUnit
         CycleLengthValue
@@ -76,10 +97,6 @@ package Training {
         IsRestDay
         Exercises List<Exercise> 
     }
-
-    MacroPeriodization *--> MesocyclePeriodization     
-    MesocyclePeriodization *--> MicroCyclePeriodization
-    MicroCyclePeriodization *--> WorkOutSessionPeriodization
 
     class TrainingProfileWeightTracker {
         TrainingProfileId
@@ -111,18 +128,39 @@ package Training {
         Weight
     }
 
+    class OneRepMaxTracker {
+        TrainingProfileId
+        ExerciseId
+        RecordDateUtc
+        Weight
+        Reps
+        EstimatedOneRepMax
+    }
+
+    enum SideWork {
+        Left
+        Right
+        Bilateral
+    }
+
+    TrainingProfile *----> TrainingProfileRole
+    TrainingProfile <--o TrainingProfileWeightTracker
+    TrainingProfile <--o SessionWork
+    TrainingProfile <--o OneRepMaxTracker
+    TrainingProfile <--o MacroPeriodization     
+
+    MacroPeriodization *--> MesocyclePeriodization     
+    MesocyclePeriodization *--> MicroCyclePeriodization
+    MicroCyclePeriodization *--> WorkOutSessionPeriodization
     WorkOutSessionPeriodization o--> Fitness.Exercise
-    TrainingProfileWeightTracker o--> TrainingProfile
-    MacroPeriodization o--> TrainingProfile
-    TrainingProfile *--> TrainingProfileRole
-    SessionWork o--> TrainingProfile
+   
     SessionWork *--> SeriesWorked
     SeriesWorked *--> SetWorked
 }
 
 Training.SeriesWorked o--> Fitness.Exercise
 
-package Gymnasium {
+package Venue {
     class Venue {
         VenuId
         Name  
@@ -136,21 +174,14 @@ package Gymnasium {
         Quantity
     }
 
-    class Equipment {
-        Name
-        EquipmentType
-    }
-
-    enum EquipmentType {
-        Freewreight
-        Machine
-        Other
-    }
+    
     
     Venue *--> VenueEquipment
-    VenueEquipment o--> Equipment
-    Equipment --> EquipmentType
+    
 }
+
+VenueEquipment o--> Fitness.Equipment
+
 Venue *--> Common.Address
 
 package Common {
@@ -162,6 +193,11 @@ package Common {
         Country
         State
         City
+    }
+
+    class Locale {
+        LocaleId
+        LocaleCode
     }
 }
 @enduml
