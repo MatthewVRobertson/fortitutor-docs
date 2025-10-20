@@ -74,8 +74,8 @@ package Training {
     {
         MacroPeriodizationId
         TrainingProfile
-        StartDateRelative
-        EndDateRelative
+        StartDate
+        EndDate
     }
     note top of MacroPeriodization
         Overall goal, months, season or year.
@@ -85,35 +85,46 @@ package Training {
     {
         MesocyclePeriodizationId
         MacroPeriodizationId
+        Version
+        IsCurrent
         CycleOrder        
         CycleLengthTimeUnit
         CycleLengthValue
-        StartDateRelative
-        EndDateRelative
+        StartDate
+        EndDate        
+        EffectiveStartDate
+        EffectiveEndDate
+        IsDeload        
     }
     note top of MesocyclePeriodization
         Focused phases - weeks to months.
         Mesocycles allow changes during a macro cycle,
         this is why there are start and end dates.
+        Deloads are also linked here.3
+        The effective dates are used, if the meso cycle is changed after creation.
+        The old dates are kept for history.
     end note
 
     class MicroCyclePeriodization
     {
         MicroCyclePeriodizationId
-        CycleOrder
-        IsDeload        
-        Sesssions List<SessionPeriodization>
+        MesocyclePeriodizationId
+        CycleDayOrder
+        IsRestDay
+        Exercises List<MicroCyclePeriodizationExercise>
     }
     note top of MicroCyclePeriodization
         The day to day plan
     end note
 
-    class WorkOutSessionPeriodization
-    {
-        IsRestDay
-        Exercises List<Exercise> 
+    class MicroCyclePeriodizationExercise
+    {        
+        Exercise
+        TargetReps
+        TargetSets
+        TargetWeight
     }
-
+    
     class TrainingProfileWeightTracker {
         TrainingProfileId
         RecordDateUtc
@@ -128,15 +139,15 @@ package Training {
         UserId
     }
 
-    class SessionWork {
+    class WorkoutSessionLog {
         TrainingProfile
-        Series List<SeriesWorked>
+        Series List<WorkoutSeriesLog>
         + SessionStartDateUtc
     }
 
-    class SeriesWorked {
+    class WorkoutSeriesLog {
         Exercise
-        Sets List<SetWorked>
+        Sets List<WorkoutSetLog>
     }
 
     enum SetType {
@@ -144,12 +155,12 @@ package Training {
         Working
     }
 
-    class SetWorked {
+    class WorkoutSetLog {
         SetType
         Reps
         Weight
         WeightUnitType
-        SideWorked
+        LateralityWorked
     }
 
     class OneRepMaxTracker {
@@ -161,7 +172,7 @@ package Training {
         EstimatedOneRepMax
     }
 
-    enum SideWork {
+    enum LateralityWorked {
         Left
         Right
         Bilateral
@@ -169,24 +180,24 @@ package Training {
 
     TrainingProfile *----> TrainingProfileRole
     TrainingProfile <--o TrainingProfileWeightTracker
-    TrainingProfile <--o SessionWork
+    TrainingProfile <--o WorkoutSessionLog
     TrainingProfile <--o OneRepMaxTracker
     TrainingProfile <--o MacroPeriodization     
 
     MacroPeriodization *--> MesocyclePeriodization     
     MesocyclePeriodization *--> MicroCyclePeriodization
-    MicroCyclePeriodization *--> WorkOutSessionPeriodization
-    WorkOutSessionPeriodization o--> Fitness.Exercise
+    MicroCyclePeriodization *--> MicroCyclePeriodizationExercise
+    MicroCyclePeriodizationExercise o--> Fitness.Exercise
    
-    SessionWork *--> SeriesWorked
-    SeriesWorked *--> SetWorked
-    SetWorked --> SideWork
-    SetWorked --> SetType
+    WorkoutSessionLog *--> WorkoutSeriesLog
+    WorkoutSeriesLog *--> WorkoutSetLog
+    WorkoutSetLog --> LateralityWorked
+    WorkoutSetLog --> SetType
     
 }
 
-SetWorked ---> Common.WeightUnitType
-Training.SeriesWorked o--> Fitness.Exercise
+WorkoutSetLog ---> Common.WeightUnitType
+Training.WorkoutSeriesLog o--> Fitness.Exercise
 TrainingProfileRole --> Auth.Role
 
 package Venue {
